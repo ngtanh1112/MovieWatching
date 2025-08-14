@@ -1,0 +1,248 @@
+.hero-section {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: var(--z-background);
+}
+
+.hero-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg,
+            transparent 0%,
+            rgba(0, 0, 0, 0.3) 40%,
+            rgba(0, 0, 0, 0.8) 100%);
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: var(--z-overlay);
+    padding: var(--spacing-xl);
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding-bottom: 4rem;
+}
+
+.heromovie-titles {
+    margin-bottom: var(--spacing-md);
+}
+
+.heromovie-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.heromovie-original-title {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.heromovie-tags {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.tag {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: var(--border-radius-xl);
+    font-size: 0.9rem;
+    backdrop-filter: blur(10px);
+}
+
+.heromovie-genres {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: 1.5rem;
+}
+
+.genre-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--text-light);
+    border-radius: var(--border-radius-xl);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: var(--transition-normal);
+}
+
+.genre-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.heromovie-overview {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin-bottom: var(--spacing-xl);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.heromovie-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--spacing-xl);
+}
+
+.heromovie-actions {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.action-btn {
+    padding: var(--spacing-md) var(--spacing-xl);
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: var(--transition-normal);
+}
+
+.play-btn {
+    background: var(--primary-color);
+    color: var(--text-light);
+}
+
+.play-btn:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+}
+
+.favorite-btn,
+.detail-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--text-light);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.favorite-btn:hover,
+.detail-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.thumbnail-list {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.thumbnail-item {
+    width: 80px;
+    height: 120px;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    border: 2px solid transparent;
+}
+
+.thumbnail-item:hover {
+    transform: scale(1.05);
+    border-color: var(--primary-color);
+}
+
+.thumbnail-item.active {
+    border-color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.thumbnail-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .heromovie-title {
+        font-size: 2rem;
+    }
+
+    .heromovie-original-title {
+        font-size: 1.2rem;
+    }
+
+    .heromovie-bottom {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        align-items: flex-start;
+    }
+
+    .heromovie-actions {
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        padding: var(--spacing-sm) var(--spacing-lg);
+        font-size: 0.9rem;
+    }
+
+    .thumbnail-list {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: var(--spacing-sm);
+    }
+
+    .thumbnail-item {
+        width: 60px;
+        height: 90px;
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content {
+        padding: var(--spacing-lg);
+        padding-bottom: var(--spacing-xxl);
+    }
+
+    .heromovie-title {
+        font-size: 1.5rem;
+    }
+
+    .heromovie-original-title {
+        font-size: 1rem;
+    }
+
+    .heromovie-overview {
+        font-size: 1rem;
+    }
+
+    .heromovie-tags {
+        flex-wrap: wrap;
+    }
+
+    .heromovie-genres {
+        flex-wrap: wrap;
+    }
+}
