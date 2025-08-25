@@ -37,8 +37,8 @@
 .hero-content {
     position: relative;
     z-index: var(--z-overlay);
-    padding: var(--spacing-xl);
-    max-width: 1200px;
+    padding: 100px;
+    max-width: 100%;
     margin: 0 auto;
     width: 100%;
     padding-bottom: 4rem;
@@ -116,10 +116,11 @@
 .heromovie-actions {
     display: flex;
     gap: var(--spacing-md);
+    align-items: center;
 }
 
 .action-btn {
-    padding: var(--spacing-md) var(--spacing-xl);
+    padding: 16px;
     border: none;
     border-radius: var(--border-radius-md);
     cursor: pointer;
@@ -131,6 +132,14 @@
 .play-btn {
     background: var(--primary-color);
     color: var(--text-light);
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+    font-size: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 24px;
 }
 
 .play-btn:hover {
@@ -140,9 +149,17 @@
 
 .favorite-btn,
 .detail-btn {
+    display: flex;
+    align-items: center;
     background: rgba(255, 255, 255, 0.2);
     color: var(--text-light);
     border: 1px solid rgba(255, 255, 255, 0.3);
+    width: 50px;
+    height: 50px;
+}
+
+.detail-btn {
+    padding-left: 21px;
 }
 
 .favorite-btn:hover,

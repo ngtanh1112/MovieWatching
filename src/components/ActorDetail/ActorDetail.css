@@ -1,0 +1,314 @@
+/* Actor Detail Styles */
+.actor-detail-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+    color: var(--text-light);
+}
+
+.actor-detail-header {
+    padding: var(--spacing-lg) var(--spacing-xxl);
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.actor-back-btn {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition-normal);
+}
+
+.actor-back-btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.actor-main-content {
+    padding: var(--spacing-xxl);
+}
+
+.content-wrapper {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: var(--spacing-xxl);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Actor Info Section */
+.actor-info-section {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xxl);
+    height: fit-content;
+    backdrop-filter: blur(10px);
+}
+
+.actor-poster {
+    width: 100%;
+    height: 450px;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    margin-bottom: var(--spacing-lg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.actor-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.actor-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+
+.actor-photo-placeholder span {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.actor-name {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+}
+
+.actor-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.actor-meta span {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: rgba(255, 107, 53, 0.1);
+    border: 1px solid rgba(255, 107, 53, 0.3);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.actor-biography h3 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.actor-biography p {
+    line-height: 1.7;
+    color: var(--text-light);
+    text-align: justify;
+}
+
+/* Movies Section */
+.actor-movies-section h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+}
+
+.actor-movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.actor-movie-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    backdrop-filter: blur(10px);
+}
+
+.actor-movie-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.actor-movie-poster {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+}
+
+.actor-movie-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-normal);
+}
+
+.movie-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: var(--transition-normal);
+}
+
+.actor-movie-item:hover .movie-overlay {
+    opacity: 1;
+}
+
+.play-icon {
+    font-size: 3rem;
+    color: var(--primary-color);
+}
+
+.actor-movie-info {
+    padding: var(--spacing-md);
+}
+
+.movie-title-vietnamese {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-light);
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.movie-title-english {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: var(--spacing-sm);
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.movie-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
+}
+
+.movie-meta span {
+    padding: 2px var(--spacing-xs);
+    background: rgba(255, 107, 53, 0.2);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+
+.movie-character {
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    font-weight: 500;
+    margin: 0;
+}
+
+.no-movies {
+    text-align: center;
+    padding: var(--spacing-xxl);
+    color: var(--text-muted);
+}
+
+.loading,
+.error-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    font-size: 1.2rem;
+    color: var(--text-light);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .content-wrapper {
+        grid-template-columns: 350px 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    .actor-movies-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .content-wrapper {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    .actor-main-content {
+        padding: var(--spacing-lg);
+    }
+
+    .actor-info-section {
+        padding: var(--spacing-lg);
+    }
+
+    .actor-poster {
+        height: 400px;
+    }
+
+    .actor-name {
+        font-size: 2rem;
+    }
+
+    .actor-movies-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: var(--spacing-md);
+    }
+
+    .actor-movie-poster {
+        height: 240px;
+    }
+}
+
+@media (max-width: 480px) {
+    .actor-detail-header {
+        padding: var(--spacing-md);
+    }
+
+    .actor-main-content {
+        padding: var(--spacing-md);
+    }
+
+    .actor-movies-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+
+    .actor-movie-poster {
+        height: 200px;
+    }
+
+    .actor-name {
+        font-size: 1.8rem;
+    }
+}

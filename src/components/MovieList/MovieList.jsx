@@ -10,7 +10,7 @@ const MovieList = ({
     onMovieClick,
     type
 }) => {
-    const maxIndex = Math.max(0, movies.length - 3);
+    const maxIndex = Math.max(0, movies.length - 5); // Thay 3 thành 5
 
     const handlePrevClick = () => {
         onNavigation(type, 'prev');
@@ -43,7 +43,7 @@ const MovieList = ({
             </div>
 
             <div className="movie-list">
-                {movies.slice(currentIndex, currentIndex + 3).map((movie, index) => (
+                {movies.slice(currentIndex, currentIndex + 5).map((movie, index) => ( // Thay 3 thành 5
                     <div
                         key={index}
                         className="movie-item"

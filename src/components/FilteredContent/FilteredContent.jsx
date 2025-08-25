@@ -11,6 +11,7 @@ const FilteredContent = ({
     currentPage,
     totalPages,
     isLoadingMore,
+    appliedFilters,
     onHomeClick,
     onMovieClick,
     onPaginationClick,
@@ -32,8 +33,70 @@ const FilteredContent = ({
     const years = ['Tất cả', '2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010'];
     const sortOptions = ['Mới nhất', 'Điểm IMDb', 'Lượt xem'];
 
-    const getMediaType = () => {
-        return currentFilter?.type === 'series' ? 'tv' : 'movie';
+    // HÀM TẠO TIÊU ĐỀ ĐỘNG
+    const generateDynamicTitle = () => {
+        const baseTitle = currentFilter?.name || 'Phim';
+
+        // Nếu chưa có filter nào được apply, trả về title gốc
+        if (!appliedFilters || Object.values(appliedFilters).every(filter =>
+            filter === 'Tất cả' || filter === 'Mới nhất' || filter === ''
+        )) {
+            return baseTitle;
+        }
+
+        const filterParts = [];
+
+        // Thêm thể loại
+        if (appliedFilters.genre && appliedFilters.genre !== 'Tất cả') {
+            filterParts.push(appliedFilters.genre);
+        }
+
+        // Thêm quốc gia
+        if (appliedFilters.country && appliedFilters.country !== 'Tất cả') {
+            filterParts.push(appliedFilters.country);
+        }
+
+        // Thêm năm
+        const yearFilter = appliedFilters.yearSearch?.trim() ||
+            (appliedFilters.year !== 'Tất cả' ? appliedFilters.year : null);
+        if (yearFilter) {
+            filterParts.push(`${yearFilter}`);
+        }
+
+        // Thêm loại phim
+        if (appliedFilters.movieType && appliedFilters.movieType !== 'Tất cả') {
+            filterParts.push(appliedFilters.movieType);
+        }
+
+        // Tạo tiêu đề
+        if (filterParts.length > 0) {
+            return `${filterParts.join(' • ')} (${appliedFilters.sortBy || 'Mới nhất'})`;
+        }
+
+        return baseTitle;
+    };
+
+    const getMediaType = (movie) => {
+        // Kiểm tra media_type trực tiếp từ object (nếu có)
+        if (movie.media_type) {
+            return movie.media_type;
+        }
+
+        // Kiểm tra dựa trên properties đặc trưng
+        if (movie.title && movie.release_date) {
+            return 'movie';
+        }
+        if (movie.name && movie.first_air_date) {
+            return 'tv';
+        }
+
+        // Fallback dựa trên currentFilter
+        if (currentFilter?.type === 'series') {
+            return 'tv';
+        }
+
+        // Default
+        return 'movie';
     };
 
     const handleFilterChange = (filterType, value) => {
@@ -79,7 +142,7 @@ const FilteredContent = ({
                 <button className="back-btn" onClick={onHomeClick}>
                     ← Về trang chủ
                 </button>
-                <h2>{currentFilter?.name}</h2>
+                <h2>{generateDynamicTitle()}</h2>
                 <button className="filter-btn" onClick={() => setShowFilterPanel(true)}>
                     🔍 Bộ lọc
                 </button>
@@ -87,88 +150,108 @@ const FilteredContent = ({
 
             {/* Filter Panel */}
             {showFilterPanel && (
-                <div className="filter-overlay">
+                <div className="filter-panel-container">
                     <div className="filter-panel">
-                        <h3>Bộ lọc phim</h3>
-
                         {/* Quốc gia */}
-                        <div className="filter-group">
+                        <div className="filter-row">
                             <label>Quốc gia:</label>
-                            <select
-                                value={tempFilters.country}
-                                onChange={(e) => handleFilterChange('country', e.target.value)}
-                            >
+                            <div className="filter-options">
                                 {countries.map(country => (
-                                    <option key={country} value={country}>{country}</option>
+                                    <button
+                                        key={country}
+                                        className={`filter-option ${tempFilters.country === country ? 'active' : ''}`}
+                                        onClick={() => handleFilterChange('country', country)}
+                                    >
+                                        {country}
+                                    </button>
                                 ))}
-                            </select>
+                            </div>
                         </div>
 
                         {/* Loại phim */}
-                        <div className="filter-group">
+                        <div className="filter-row">
                             <label>Loại phim:</label>
-                            <select
-                                value={tempFilters.movieType}
-                                onChange={(e) => handleFilterChange('movieType', e.target.value)}
-                            >
+                            <div className="filter-options">
                                 {movieTypes.map(type => (
-                                    <option key={type} value={type}>{type}</option>
+                                    <button
+                                        key={type}
+                                        className={`filter-option ${tempFilters.movieType === type ? 'active' : ''}`}
+                                        onClick={() => handleFilterChange('movieType', type)}
+                                    >
+                                        {type}
+                                    </button>
                                 ))}
-                            </select>
+                            </div>
                         </div>
 
                         {/* Thể loại */}
-                        <div className="filter-group">
+                        <div className="filter-row">
                             <label>Thể loại:</label>
-                            <select
-                                value={tempFilters.genre}
-                                onChange={(e) => handleFilterChange('genre', e.target.value)}
-                            >
+                            <div className="filter-options">
                                 {genres.map(genre => (
-                                    <option key={genre} value={genre}>{genre}</option>
+                                    <button
+                                        key={genre}
+                                        className={`filter-option ${tempFilters.genre === genre ? 'active' : ''}`}
+                                        onClick={() => handleFilterChange('genre', genre)}
+                                    >
+                                        {genre}
+                                    </button>
                                 ))}
-                            </select>
+                            </div>
                         </div>
 
                         {/* Năm sản xuất */}
-                        <div className="filter-group">
+                        <div className="filter-row">
                             <label>Năm sản xuất:</label>
-                            <div className="year-filter-container">
-                                <select
-                                    value={tempFilters.year}
-                                    onChange={(e) => handleFilterChange('year', e.target.value)}
-                                >
+                            <div className="year-input-container">
+                                <div className="filter-options">
                                     {years.map(year => (
-                                        <option key={year} value={year}>{year}</option>
+                                        <button
+                                            key={year}
+                                            className={`filter-option ${tempFilters.year === year ? 'active' : ''}`}
+                                            onClick={() => handleFilterChange('year', year)}
+                                        >
+                                            {year}
+                                        </button>
                                     ))}
-                                </select>
-                                <input
-                                    type="text"
-                                    placeholder="Nhập năm"
-                                    value={tempFilters.yearSearch}
-                                    onChange={(e) => handleFilterChange('yearSearch', e.target.value)}
-                                    className="year-search-input"
-                                />
+                                </div>
+                                <div className="year-input">
+                                    <div className="search-icon">
+                                        <i className="fa-solid fa-search"></i>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder="Nhập năm"
+                                        value={tempFilters.yearSearch}
+                                        onChange={(e) => handleFilterChange('yearSearch', e.target.value)}
+                                        className="year-search-input"
+                                        maxLength="4"
+                                    />
+                                </div>
                             </div>
                         </div>
 
                         {/* Sắp xếp */}
-                        <div className="filter-group">
+                        <div className="filter-row">
                             <label>Sắp xếp:</label>
-                            <select
-                                value={tempFilters.sortBy}
-                                onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-                            >
+                            <div className="filter-options">
                                 {sortOptions.map(option => (
-                                    <option key={option} value={option}>{option}</option>
+                                    <button
+                                        key={option}
+                                        className={`filter-option ${tempFilters.sortBy === option ? 'active' : ''}`}
+                                        onClick={() => handleFilterChange('sortBy', option)}
+                                    >
+                                        {option}
+                                    </button>
                                 ))}
-                            </select>
+                            </div>
                         </div>
 
                         {/* Buttons */}
                         <div className="filter-buttons">
                             <button className="apply-filter-btn" onClick={handleApplyFilters}>
                                 Lọc kết quả
+                                <i className="fa-solid fa-arrow-right"></i>
                             </button>
                             <button className="close-filter-btn" onClick={handleCloseFilter}>
                                 Đóng
@@ -183,7 +266,7 @@ const FilteredContent = ({
                     <div
                         key={`${movie.id}-${index}`}
                         className="filtered-movie-item"
-                        onClick={() => onMovieClick(movie, getMediaType())}
+                        onClick={() => onMovieClick(movie, getMediaType(movie))}
                     >
                         {movie.poster_path ? (
                             <img
@@ -198,7 +281,7 @@ const FilteredContent = ({
                         )}
                         <div className="filtered-movie-info">
                             <h4>{movie.title || movie.name}</h4>
-                            <p>⭐ {movie.vote_average.toFixed(1)}</p>
+                            <p className='imdb-container'><span className="imdb-text">IMDb</span> {movie.vote_average.toFixed(1)}</p>
                             <p>{getMovieYear(movie.release_date || movie.first_air_date)}</p>
                         </div>
                     </div>

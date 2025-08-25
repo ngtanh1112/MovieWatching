@@ -1,20 +1,27 @@
+// App.jsx
+
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header/Header';
 import HeroSection from './components/HeroSection/HeroSection';
 import MovieList from './components/MovieList/MovieList';
 import MovieDetail from './components/MovieDetail/MovieDetail';
+import ActorDetail from './components/ActorDetail/ActorDetail';
 import FilteredContent from './components/FilteredContent/FilteredContent';
-import { VIEW_TYPES, topicsData, countriesData } from './utils/constants';
+import { VIEW_TYPES, topicsData, countriesData, apiConfig } from './utils/constants';
 import {
   fetchHeroMovies,
-  fetchKoreaMovies,
-  fetchChineseMovies,
+  fetchTopRatedKoreaMovies,      // Thay fetchKoreaMovies
+  fetchTopRatedChineseMovies,    // Thay fetchChineseMovies
+  fetchTopRatedUSUKMovies,       // Thay fetchUSUKMovies
   fetchMovieDetails,
   fetchMoviesByGenre,
   fetchMoviesByCountry,
   fetchMoviesByTopic,
   fetchMovies,
-  fetchTVSeries
+  fetchTVSeries,
+  fetchFilteredMovies,
+  fetchTrendingToday,
+  fetchAnime
 } from './services/movieService';
 import './styles/variables.css';
 import './styles/globals.css';
@@ -38,6 +45,27 @@ function App() {
   const [totalPages, setTotalPages] = useState(1);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
+  // Actor detail states
+  const [selectedActor, setSelectedActor] = useState(null);
+  const [actorDetails, setActorDetails] = useState(null);
+  const [actorMovies, setActorMovies] = useState([]);
+
+  const [usukMovies, setUsukMovies] = useState([]);
+  const [usukCurrentIndex, setUsukCurrentIndex] = useState(0);
+  const [trendingToday, setTrendingToday] = useState([]);
+  const [popularAnime, setPopularAnime] = useState([]);
+  const [currentAnime, setCurrentAnime] = useState(0);
+
+  // Filter states - THÊM MỚI
+  const [appliedFilters, setAppliedFilters] = useState({
+    country: 'Tất cả',
+    movieType: 'Tất cả',
+    genre: 'Tất cả',
+    year: 'Tất cả',
+    yearSearch: '',
+    sortBy: 'Mới nhất'
+  });
+
   // Movie detail states
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [movieDetails, setMovieDetails] = useState(null);
@@ -50,22 +78,27 @@ function App() {
     const initializeData = async () => {
       try {
         setLoading(true);
-        const [heroData, koreaData, chineseData] = await Promise.all([
+        const [heroData, koreaData, chineseData, usukData, trendingData, animeData] = await Promise.all([
           fetchHeroMovies(),
-          fetchKoreaMovies(),
-          fetchChineseMovies()
+          fetchTopRatedKoreaMovies(),
+          fetchTopRatedChineseMovies(),
+          fetchTopRatedUSUKMovies(),
+          fetchTrendingToday(),
+          fetchAnime()  // Thay đổi
         ]);
 
         setHeroMovies(heroData);
         setKoreaMovies(koreaData);
         setChineseMovies(chineseData);
+        setUsukMovies(usukData);
+        setTrendingToday(trendingData);
+        setPopularAnime(animeData);
       } catch (error) {
         console.error('Error initializing data:', error);
       } finally {
         setLoading(false);
       }
     };
-
     initializeData();
   }, []);
 
@@ -73,6 +106,15 @@ function App() {
   const handleHomeClick = () => {
     setCurrentView(VIEW_TYPES.HOME);
     setCurrentFilter(null);
+    // Reset filters khi về trang chủ
+    setAppliedFilters({
+      country: 'Tất cả',
+      movieType: 'Tất cả',
+      genre: 'Tất cả',
+      year: 'Tất cả',
+      yearSearch: '',
+      sortBy: 'Mới nhất'
+    });
   };
 
   const handleThumbnailClick = (index) => {
@@ -81,18 +123,25 @@ function App() {
 
   const handleMovieListNavigation = (type, direction) => {
     if (type === 'korea') {
-      const maxIndex = Math.max(0, koreaMovies.length - 3);
+      const maxIndex = Math.max(0, koreaMovies.length - 5); // Thay 3 thành 5
       if (direction === 'next') {
-        setKoreaCurrentIndex(prev => Math.min(prev + 3, maxIndex));
+        setKoreaCurrentIndex(prev => Math.min(prev + 5, maxIndex)); // Thay 3 thành 5
       } else {
-        setKoreaCurrentIndex(prev => Math.max(prev - 3, 0));
+        setKoreaCurrentIndex(prev => Math.max(prev - 5, 0)); // Thay 3 thành 5
       }
     } else if (type === 'chinese') {
-      const maxIndex = Math.max(0, chineseMovies.length - 3);
+      const maxIndex = Math.max(0, chineseMovies.length - 5); // Thay 3 thành 5
       if (direction === 'next') {
-        setChineseCurrentIndex(prev => Math.min(prev + 3, maxIndex));
+        setChineseCurrentIndex(prev => Math.min(prev + 5, maxIndex)); // Thay 3 thành 5
       } else {
-        setChineseCurrentIndex(prev => Math.max(prev - 3, 0));
+        setChineseCurrentIndex(prev => Math.max(prev - 5, 0)); // Thay 3 thành 5
+      }
+    } else if (type === 'usuk') {
+      const maxIndex = Math.max(0, usukMovies.length - 5); // Thay 3 thành 5
+      if (direction === 'next') {
+        setUsukCurrentIndex(prev => Math.min(prev + 5, maxIndex)); // Thay 3 thành 5
+      } else {
+        setUsukCurrentIndex(prev => Math.max(prev - 5, 0)); // Thay 3 thành 5
       }
     }
   };
@@ -116,6 +165,57 @@ function App() {
       console.error('Error fetching movie details:', error);
     } finally {
       setDetailLoading(false);
+    }
+  };
+
+  // Actor detail handler
+  const handleActorClick = async (actor) => {
+    try {
+      setSelectedActor(actor);
+      setCurrentView(VIEW_TYPES.ACTOR_DETAIL);
+      setDetailLoading(true);
+
+      // Fetch actor details và movies
+      const [detailsResponse, moviesResponse] = await Promise.all([
+        fetch(`${apiConfig.baseUrl}person/${actor.id}?api_key=${apiConfig.apiKey}&language=vi`),
+        fetch(`${apiConfig.baseUrl}person/${actor.id}/combined_credits?api_key=${apiConfig.apiKey}&language=vi`)
+      ]);
+
+      const details = await detailsResponse.json();
+      const moviesData = await moviesResponse.json();
+
+      setActorDetails(details);
+      setActorMovies(moviesData.cast || []);
+
+      // Scroll to top when showing details
+      window.scrollTo(0, 0);
+    } catch (error) {
+      console.error('Error fetching actor details:', error);
+    } finally {
+      setDetailLoading(false);
+    }
+  };
+
+  // THÊM HÀM XỬ LÝ FILTER - QUAN TRỌNG
+  const handleFilterChange = async (filters) => {
+    try {
+      setLoading(true);
+      setCurrentPage(1);
+      setAppliedFilters(filters);
+
+      // Gọi API với filters mới
+      const { movies, totalPages: total } = await fetchFilteredMovies(
+        currentFilter,
+        filters,
+        1
+      );
+
+      setFilteredMovies(movies);
+      setTotalPages(total);
+    } catch (error) {
+      console.error('Error applying filters:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -221,7 +321,10 @@ function App() {
     setCurrentFilter({ type: 'schedule', name: 'Lịch chiếu' });
   };
 
-  // Pagination handler
+  const handleAnimeThumbnailClick = (index) => {
+    setCurrentAnime(index);
+  };
+  // Pagination handler - CẬP NHẬT ĐỂ HỖ TRỢ FILTER
   const handlePaginationClick = async (newPage) => {
     if (newPage < 1 || newPage > totalPages || isLoadingMore) return;
 
@@ -230,25 +333,32 @@ function App() {
 
     try {
       let result;
-      switch (currentFilter?.type) {
-        case 'genre':
-          result = await fetchMoviesByGenre(currentFilter.id, newPage);
-          break;
-        case 'country':
-          result = await fetchMoviesByCountry(currentFilter.code, newPage);
-          break;
-        case 'topic':
-          const topic = topicsData.find(t => t.id === currentFilter.id);
-          result = await fetchMoviesByTopic(topic, newPage);
-          break;
-        case 'movies':
-          result = await fetchMovies(newPage);
-          break;
-        case 'series':
-          result = await fetchTVSeries(newPage);
-          break;
-        default:
-          return;
+
+      // Nếu có filter đã được apply, sử dụng filter
+      if (Object.values(appliedFilters).some(filter => filter !== 'Tất cả' && filter !== 'Mới nhất' && filter !== '')) {
+        result = await fetchFilteredMovies(currentFilter, appliedFilters, newPage);
+      } else {
+        // Ngược lại sử dụng logic cũ
+        switch (currentFilter?.type) {
+          case 'genre':
+            result = await fetchMoviesByGenre(currentFilter.id, newPage);
+            break;
+          case 'country':
+            result = await fetchMoviesByCountry(currentFilter.code, newPage);
+            break;
+          case 'topic':
+            const topic = topicsData.find(t => t.id === currentFilter.id);
+            result = await fetchMoviesByTopic(topic, newPage);
+            break;
+          case 'movies':
+            result = await fetchMovies(newPage);
+            break;
+          case 'series':
+            result = await fetchTVSeries(newPage);
+            break;
+          default:
+            return;
+        }
       }
 
       setFilteredMovies(result.movies);
@@ -271,6 +381,20 @@ function App() {
           detailLoading={detailLoading}
           onHomeClick={handleHomeClick}
           onMovieClick={handleMovieClick}
+          onActorClick={handleActorClick}
+        />
+      );
+    }
+
+    if (currentView === VIEW_TYPES.ACTOR_DETAIL && selectedActor) {
+      return (
+        <ActorDetail
+          actor={selectedActor}
+          actorDetails={actorDetails}
+          actorMovies={actorMovies}
+          detailLoading={detailLoading}
+          onHomeClick={handleHomeClick}
+          onMovieClick={handleMovieClick}
         />
       );
     }
@@ -289,9 +413,10 @@ function App() {
                 onMovieClick={handleMovieClick}
               />
 
+              {/* Movie Lists */}
               <div className="topic-list-container">
                 <MovieList
-                  title="Phim Hàn Quốc mới"
+                  title="Top Phim Hàn Quốc"
                   movies={koreaMovies}
                   currentIndex={koreaCurrentIndex}
                   onNavigation={handleMovieListNavigation}
@@ -300,14 +425,121 @@ function App() {
                 />
 
                 <MovieList
-                  title="Phim Trung Quốc mới"
+                  title="Top Phim Trung Quốc"
                   movies={chineseMovies}
                   currentIndex={chineseCurrentIndex}
                   onNavigation={handleMovieListNavigation}
                   onMovieClick={handleMovieClick}
                   type="chinese"
                 />
+
+                <MovieList
+                  title="Top Phim US-UK"
+                  movies={usukMovies}
+                  currentIndex={usukCurrentIndex}
+                  onNavigation={handleMovieListNavigation}
+                  onMovieClick={handleMovieClick}
+                  type="usuk"
+                />
               </div>
+
+              {/* Top 5 Movies Today */}
+              <div className="top-movies-today">
+                <div className="section-header">
+                  <h2 className="section-title">Top 5 Bộ Phim Hôm Nay</h2>
+                </div>
+                <div className="top-movies-grid">
+                  {trendingToday.map((movie, index) => (
+                    <div
+                      key={movie.id}
+                      className="top-movie-item"
+                      onClick={() => handleMovieClick(movie)}
+                    >
+                      <div className="movie-rank">{index + 1}</div>
+                      <img
+                        src={apiConfig.w500Image(movie.poster_path)}
+                        alt={movie.title}
+                      />
+                      <div className="top-movie-info">
+                        <h3>{movie.title}</h3>
+                        <div className="movie-meta">
+                          <span className="rating">⭐ {movie.vote_average.toFixed(1)}</span>
+                          <span className="year">{new Date(movie.release_date).getFullYear()}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* Anime Section */}
+              <h2 className="anime-section-title">Kho Tàng Anime</h2>
+
+              {popularAnime.length > 0 && (
+                <div className="anime-section">
+                  <div className="anime-container">
+                    <div className="anime-content">
+                      <div className="anime-info">
+                        <div className="anime-titles">
+                          <div className="anime-title">{popularAnime[currentAnime]?.title || popularAnime[currentAnime]?.name}</div>
+                          <div className="anime-original-title">
+                            {popularAnime[currentAnime]?.english_title || popularAnime[currentAnime]?.english_name ||
+                              popularAnime[currentAnime]?.original_title || popularAnime[currentAnime]?.original_name}
+                          </div>
+                        </div>
+
+                        <div className="anime-tags">
+                          <span className="tag tag-rating">IMDb: {popularAnime[currentAnime]?.vote_average.toFixed(1)}</span>
+                          <span className="tag tag-year">
+                            Năm: {new Date(popularAnime[currentAnime]?.release_date || popularAnime[currentAnime]?.first_air_date).getFullYear()}
+                          </span>
+                          <span className="tag tag-type">
+                            {popularAnime[currentAnime]?.media_type === 'tv' ? 'TV Series' : 'Movie'}
+                          </span>
+                        </div>
+
+                        <div className="anime-overview">
+                          {popularAnime[currentAnime]?.overview || 'Không có mô tả'}
+                        </div>
+
+                        <div className="anime-actions">
+                          <button className="action-btn play-btn">▶</button>
+                          <button className="action-btn favorite-btn">❤</button>
+                          <button
+                            className="action-btn detail-btn"
+                            onClick={() => handleMovieClick(popularAnime[currentAnime], popularAnime[currentAnime]?.media_type)}
+                          >ℹ</button>
+                        </div>
+                      </div>
+
+                      <div className="anime-background">
+                        <img
+                          src={apiConfig.originalImage(popularAnime[currentAnime]?.backdrop_path)}
+                          alt={popularAnime[currentAnime]?.title || popularAnime[currentAnime]?.name}
+                        />
+                        <div className="anime-overlay"></div>
+                      </div>
+                    </div>
+
+                    <div className="anime-thumbnails">
+                      <div className="anime-thumbnail-list">
+                        {popularAnime.map((anime, index) => (
+                          <div
+                            key={index}
+                            className={`anime-thumbnail-item ${index === currentAnime ? 'active' : ''}`}
+                            onClick={() => handleAnimeThumbnailClick(index)}
+                          >
+                            <img
+                              src={apiConfig.w500Image(anime.poster_path)}
+                              alt={anime.title || anime.name}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
             </>
           )}
         </>
@@ -323,9 +555,11 @@ function App() {
           currentPage={currentPage}
           totalPages={totalPages}
           isLoadingMore={isLoadingMore}
+          appliedFilters={appliedFilters} // THÊM PROP NÀY
           onHomeClick={handleHomeClick}
           onMovieClick={handleMovieClick}
           onPaginationClick={handlePaginationClick}
+          onFilterChange={handleFilterChange}
         />
       );
     }

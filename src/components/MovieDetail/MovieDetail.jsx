@@ -10,7 +10,8 @@ const MovieDetail = ({
     recommendedMovies,
     detailLoading,
     onHomeClick,
-    onMovieClick
+    onMovieClick,
+    onActorClick // THÊM PROP MỚI
 }) => {
     const [movieVideos, setMovieVideos] = React.useState(null);
     const [videosLoading, setVideosLoading] = React.useState(true);
@@ -38,6 +39,7 @@ const MovieDetail = ({
 
         fetchVideos();
     }, [movieDetails]);
+
     if (detailLoading) {
         return (
             <div className="movie-detail-container">
@@ -98,9 +100,6 @@ const MovieDetail = ({
                     className="backdrop-image"
                 />
                 <div className="backdrop-overlay"></div>
-                <button className="detail-back-btn" onClick={onHomeClick}>
-                    ← Về trang chủ
-                </button>
             </div>
 
             {/* Main Content Section */}
@@ -196,13 +195,18 @@ const MovieDetail = ({
                 </div>
             </div>
 
-            {/* Cast Section */}
+            {/* Cast Section - CẬP NHẬT ĐỂ THÊM ONCLICK */}
             {movieCredits && movieCredits.cast && movieCredits.cast.length > 0 && (
                 <div className="detail-section cast-section">
                     <h3>Diễn viên</h3>
                     <div className="cast-list">
                         {movieCredits.cast.slice(0, 10).map((actor, index) => (
-                            <div key={index} className="cast-item">
+                            <div
+                                key={index}
+                                className="cast-item"
+                                onClick={() => onActorClick && onActorClick(actor)} // THÊM ONCLICK
+                                style={{ cursor: 'pointer' }} // THÊM CURSOR POINTER
+                            >
                                 <div className="cast-photo">
                                     {actor.profile_path ? (
                                         <img

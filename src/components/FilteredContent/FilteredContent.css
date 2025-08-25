@@ -1,7 +1,5 @@
 .filtered-content {
-    padding: 120px var(--spacing-xl) 4rem;
-    max-width: 1200px;
-    margin: 0 auto;
+    padding: 120px 0 4rem;
     min-height: 100vh;
 }
 
@@ -10,7 +8,10 @@
     align-items: center;
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-xl);
-    padding-bottom: var(--spacing-md);
+    padding: 0 var(--spacing-xl) var(--spacing-md);
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -23,48 +24,50 @@
 }
 
 .filter-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #191B24;
     color: white;
     border: none;
     padding: 12px 20px;
     border-radius: 25px;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
 
 .filter-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    color: rgb(193, 193, 193);
 }
 
-/* Filter Panel Styles */
-.filter-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
+/* Updated Filter Panel Styles - Inline instead of overlay */
+.filter-panel-container {
+    width: 100%;
+    margin-bottom: var(--spacing-xl);
+    padding: 0 var(--spacing-xl);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+        max-height: 0;
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 1000px;
+    }
 }
 
 .filter-panel {
-    background: linear-gradient(145deg, #2d3748 0%, #1a202c 100%);
+    background: #191B24;
     border-radius: 20px;
     padding: 2rem;
-    width: 90%;
-    max-width: 500px;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
 .filter-panel h3 {
@@ -79,106 +82,137 @@
     background-clip: text;
 }
 
-.filter-group {
+/* Filter rows layout */
+.filter-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 1rem;
+    align-items: start;
     margin-bottom: 1.5rem;
 }
 
+.filter-row:last-child {
+    margin-bottom: 0;
+}
+
+.filter-group {
+    display: contents;
+}
+
 .filter-group label {
-    display: block;
     color: var(--text-light);
     font-weight: 500;
-    margin-bottom: 0.5rem;
     font-size: 0.9rem;
+    align-self: center;
 }
 
-.filter-group select {
-    width: 100%;
-    padding: 12px 15px;
+.filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.filter-option {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.filter-option:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-light);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.filter-option.active {
+    color: var(--primary-color);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+}
+
+/* Year input special styling */
+.year-input-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.year-input {
+    position: relative;
+    display: flex;
+    align-items: center;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    color: var(--text-light);
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    outline: none;
+    border-radius: 25px;
+    padding: 8px 16px;
+    overflow: hidden;
 }
 
-.filter-group select:focus {
-    border-color: #667eea;
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.filter-group select option {
-    background: #1a202c;
-    color: var(--text-light);
-    padding: 10px;
-}
-
-.year-filter-container {
-    display: flex;
-    gap: 0.75rem;
-}
-
-.year-filter-container select {
-    flex: 2;
+.search-icon {
+    color: var(--text-muted);
+    margin-right: 8px;
+    font-size: 0.8rem;
 }
 
 .year-search-input {
-    flex: 1;
-    padding: 12px 15px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
+    background: transparent;
+    border: none;
     color: var(--text-light);
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
+    font-size: 0.85rem;
     outline: none;
-}
-
-.year-search-input:focus {
-    border-color: #667eea;
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    width: 80px;
 }
 
 .year-search-input::placeholder {
     color: var(--text-muted);
 }
 
+.year-input:focus-within {
+    border-color: #667eea;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
 .filter-buttons {
     display: flex;
     gap: 1rem;
     margin-top: 2rem;
+    justify-content: center;
 }
 
 .apply-filter-btn {
-    flex: 1;
-    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    background: var(--primary-color);
     color: white;
     border: none;
-    padding: 14px 20px;
-    border-radius: 10px;
-    font-size: 1rem;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .apply-filter-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(72, 187, 120, 0.6);
+    background-color: #ec551f;
 }
 
 .close-filter-btn {
-    flex: 1;
     background: transparent;
     color: var(--text-muted);
     border: 2px solid rgba(255, 255, 255, 0.2);
-    padding: 14px 20px;
-    border-radius: 10px;
-    font-size: 1rem;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 0.95rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -190,11 +224,14 @@
     background: rgba(255, 255, 255, 0.05);
 }
 
+/* UPDATED: Grid with 8 items per row */
 .filtered-movies-grid {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     gap: 1.5rem;
     margin-bottom: var(--spacing-xxl);
+    padding: 0 var(--spacing-xl);
+    width: 100%;
 }
 
 .filtered-movie-item {
@@ -204,10 +241,11 @@
     transition: var(--transition-normal);
     cursor: pointer;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
 }
 
 .filtered-movie-item:hover {
-    transform: translateY(-8px);
+    transform: translateY(-10px);
     background: rgba(255, 255, 255, 0.1);
     box-shadow: var(--shadow-xl);
     border-color: rgba(255, 255, 255, 0.2);
@@ -215,7 +253,8 @@
 
 .filtered-movie-item img {
     width: 100%;
-    height: 250px;
+    height: 280px;
+    /* Adjusted height for 8 columns */
     object-fit: cover;
     transition: transform var(--transition-normal);
 }
@@ -226,23 +265,43 @@
 
 .movie-poster-placeholder {
     width: 100%;
-    height: 250px;
+    height: 280px;
+    /* Adjusted height for 8 columns */
     background: rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 3rem;
+    /* Adjusted icon size */
     color: var(--text-muted);
 }
 
 .filtered-movie-info {
-    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: var(--spacing-sm);
+    /* Reduced padding for smaller items */
+    min-height: 100px;
+    /* Adjusted height */
+}
+
+.imdb-container {
+    border: solid rgb(206, 206, 23) 1px;
+    border-radius: 5px;
+    padding: 2px 5px;
+}
+
+.imdb-text {
+    color: rgb(206, 206, 23);
 }
 
 .filtered-movie-info h4 {
-    font-size: 1rem;
+    font-size: 0.95rem;
+    /* Smaller font for 8 columns */
     font-weight: 600;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
     color: var(--text-light);
     line-height: 1.3;
     display: -webkit-box;
@@ -252,9 +311,10 @@
 }
 
 .filtered-movie-info p {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    /* Smaller font */
     color: var(--text-muted);
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.2rem;
 }
 
 .no-results {
@@ -268,39 +328,115 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
+@media (max-width: 1600px) {
+    .filtered-movies-grid {
+        grid-template-columns: repeat(7, 1fr);
+        gap: 1.4rem;
+    }
+}
+
+@media (max-width: 1400px) {
     .filtered-movies-grid {
         grid-template-columns: repeat(6, 1fr);
-        gap: var(--spacing-md);
+        gap: 1.5rem;
+    }
+
+    .filtered-movie-item img,
+    .movie-poster-placeholder {
+        height: 300px;
+    }
+
+    .movie-poster-placeholder {
+        font-size: 3.5rem;
+    }
+
+    .filtered-movie-info h4 {
+        font-size: 1rem;
+    }
+
+    .filtered-movie-info p {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .filtered-movies-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1.6rem;
+    }
+
+    .filtered-movie-item img,
+    .movie-poster-placeholder {
+        height: 320px;
+    }
+
+    .filtered-movie-info {
+        padding: var(--spacing-md);
+    }
+
+    .filtered-movie-info h4 {
+        font-size: 1.1rem;
+    }
+
+    .filtered-movie-info p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .filtered-movies-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.6rem;
     }
 }
 
 @media (max-width: 768px) {
     .filtered-content {
-        padding: 100px var(--spacing-md) var(--spacing-xl);
+        padding: 100px 0 var(--spacing-xl);
     }
 
     .filtered-header {
         flex-direction: column;
         align-items: flex-start;
         gap: var(--spacing-sm);
+        padding: 0 var(--spacing-md) var(--spacing-md);
     }
 
     .filtered-header h2 {
         font-size: 1.5rem;
     }
 
+    .filter-panel-container {
+        padding: 0 var(--spacing-md);
+    }
+
     .filter-panel {
-        width: 95%;
         padding: 1.5rem;
+        border-radius: 15px;
     }
 
     .filter-panel h3 {
         font-size: 1.3rem;
     }
 
-    .year-filter-container {
+    .filter-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        text-align: left;
+    }
+
+    .filter-row label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .filter-options {
+        justify-content: flex-start;
+    }
+
+    .year-input-container {
         flex-direction: column;
+        align-items: flex-start;
     }
 
     .filter-buttons {
@@ -308,23 +444,24 @@
     }
 
     .filtered-movies-grid {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: var(--spacing-md);
+        padding: 0 var(--spacing-md);
     }
 
     .filtered-movie-item img,
     .movie-poster-placeholder {
-        height: 200px;
+        height: 280px;
     }
 
     .movie-poster-placeholder {
-        font-size: 2rem;
+        font-size: 3rem;
     }
 }
 
 @media (max-width: 480px) {
-    .filtered-content {
-        padding: 100px var(--spacing-sm) var(--spacing-lg);
+    .filter-panel-container {
+        padding: 0 var(--spacing-sm);
     }
 
     .filter-panel {
@@ -332,34 +469,36 @@
         border-radius: 15px;
     }
 
-    .filter-group select,
-    .year-search-input {
-        padding: 10px 12px;
+    .filter-option {
+        padding: 6px 12px;
+        font-size: 0.8rem;
     }
 
     .filtered-movies-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: var(--spacing-sm);
+        padding: 0 var(--spacing-sm);
     }
 
     .filtered-movie-item img,
     .movie-poster-placeholder {
-        height: 180px;
+        height: 240px;
     }
 
     .movie-poster-placeholder {
-        font-size: 1.5rem;
+        font-size: 2.5rem;
     }
 
     .filtered-movie-info {
         padding: var(--spacing-sm);
+        min-height: 100px;
     }
 
     .filtered-movie-info h4 {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
     }
 
     .filtered-movie-info p {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
     }
 }

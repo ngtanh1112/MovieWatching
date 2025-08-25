@@ -50,13 +50,12 @@ const HeroSection = ({
 
                 <div className="heromovie-bottom">
                     <div className="heromovie-actions">
-                        <button className="action-btn play-btn">▶ Phát</button>
-                        <button className="action-btn favorite-btn">❤ Yêu thích</button>
+                        <button className="action-btn play-btn">▶</button>
+                        <button className="action-btn favorite-btn">❤</button>
                         <button
                             className="action-btn detail-btn"
                             onClick={() => onMovieClick(currentMovie)}
-                        >
-                            ℹ Chi tiết
+                        >ℹ
                         </button>
                     </div>
 

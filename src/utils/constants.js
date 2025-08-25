@@ -1,4 +1,6 @@
 // API Configuration
+// constant.js
+
 export const apiConfig = {
     baseUrl: 'https://api.themoviedb.org/3/',
     apiKey: 'bf5d00c5c6b9099da2d56124dc609c9a',
@@ -57,6 +59,7 @@ export const countriesData = [
 // View types
 export const VIEW_TYPES = {
     HOME: 'home',
+    ACTOR_DETAIL: 'actor_detail',
     TOPIC: 'topic',
     GENRE: 'genre',
     COUNTRY: 'country',
