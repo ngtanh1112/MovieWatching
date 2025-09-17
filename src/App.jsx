@@ -7,6 +7,7 @@ import MovieList from './components/MovieList/MovieList';
 import MovieDetail from './components/MovieDetail/MovieDetail';
 import ActorDetail from './components/ActorDetail/ActorDetail';
 import FilteredContent from './components/FilteredContent/FilteredContent';
+import ChatBox from './components/ChatBox/ChatBox';
 import { VIEW_TYPES, topicsData, countriesData, apiConfig } from './utils/constants';
 import {
   fetchHeroMovies,
@@ -591,6 +592,9 @@ function App() {
       />
 
       {renderMainContent()}
+
+      {/* ChatBox Component */}
+      <ChatBox />
     </div>
   );
 }

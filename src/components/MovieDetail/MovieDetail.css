@@ -130,6 +130,7 @@
     font-weight: 600;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    white-space: nowrap;
 }
 
 .detail-rating {
@@ -154,6 +155,7 @@
     font-weight: 500;
     border: 1px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(5px);
+    white-space: nowrap;
 }
 
 .detail-overview {
@@ -205,7 +207,6 @@
     flex-wrap: wrap;
     justify-content: center;
     backdrop-filter: blur(10px);
-
 }
 
 .detail-play-btn,
@@ -286,6 +287,27 @@
     border-radius: var(--border-radius-lg);
 }
 
+.trailer-loading,
+.no-trailer {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius-lg);
+    padding: 40px 20px;
+    text-align: center;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+}
+
+.loading-placeholder,
+.no-trailer-placeholder {
+    color: #cccccc;
+    font-size: 1rem;
+}
+
+.no-trailer-placeholder span {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
 .trailer-note {
     margin-top: 15px;
     font-size: 0.9rem;
@@ -326,11 +348,13 @@
     padding: var(--spacing-lg) 15px;
     border-radius: var(--border-radius-lg);
     transition: var(--transition-normal);
+    cursor: pointer;
 }
 
 .cast-item:hover {
     transform: translateY(-5px);
     background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .cast-photo {
@@ -418,7 +442,25 @@
     color: #cccccc;
 }
 
-/* Responsive Design */
+/* Responsive Design - IMPROVED */
+@media (max-width: 1200px) {
+    .content-wrapper {
+        max-width: 100%;
+        padding: 0 var(--spacing-md);
+        gap: var(--spacing-xl);
+    }
+
+    .detail-info {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .detail-overview {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
 @media (max-width: 1024px) {
     .content-wrapper {
         grid-template-columns: 1fr;
@@ -434,41 +476,80 @@
     .detail-actions {
         justify-content: center;
         flex-direction: row;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .movie-info-section {
+        align-items: center;
+        text-align: center;
+    }
+
+    .detail-poster {
+        margin: 0 auto;
+    }
+
+    .detail-info {
+        max-width: 500px;
+    }
+
+    .detail-overview {
+        max-width: 450px;
     }
 }
 
 @media (max-width: 768px) {
     .detail-backdrop-section {
-        height: 30vh;
+        height: 40vh;
         min-height: 250px;
     }
 
+    .detail-main-content {
+        padding: var(--spacing-xl) 0;
+    }
+
+    .content-wrapper {
+        padding: 0 var(--spacing-md);
+        gap: var(--spacing-lg);
+    }
+
     .movie-info-section {
-        flex-direction: column;
-        text-align: center;
         gap: var(--spacing-lg);
     }
 
     .detail-poster {
         width: 200px;
-        margin: 0 auto;
     }
 
     .detail-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        text-align: center;
     }
 
     .detail-original-title {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+        text-align: center;
     }
 
     .detail-meta {
         justify-content: center;
+        gap: var(--spacing-md);
+    }
+
+    .detail-genres {
+        justify-content: center;
+    }
+
+    .detail-overview {
+        text-align: center;
+        max-width: 100%;
+        font-size: 0.95rem;
     }
 
     .detail-actions {
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
+        max-width: 300px;
     }
 
     .detail-play-btn,
@@ -477,6 +558,21 @@
         flex: none;
         min-width: auto;
         width: 100%;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+
+    .trailer-section h3 {
+        font-size: 1.6rem;
+    }
+
+    .detail-section {
+        padding: var(--spacing-xl) var(--spacing-md);
+    }
+
+    .detail-section h3 {
+        font-size: 1.8rem;
+        text-align: center;
     }
 
     .cast-list {
@@ -484,42 +580,112 @@
         gap: 15px;
     }
 
+    .cast-photo {
+        width: 70px;
+        height: 70px;
+    }
+
+    .cast-name {
+        font-size: 0.9rem;
+    }
+
+    .cast-character {
+        font-size: 0.8rem;
+    }
+
     .recommendations-list {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+    }
+
+    .recommendation-item img {
+        height: 200px;
     }
 }
 
 @media (max-width: 480px) {
+    .detail-backdrop-section {
+        height: 35vh;
+        min-height: 200px;
+    }
+
     .detail-main-content {
-        padding: var(--spacing-xl) 0;
+        padding: var(--spacing-lg) 0;
     }
 
     .content-wrapper {
         padding: 0 15px;
+        gap: var(--spacing-lg);
     }
 
     .detail-poster {
-        width: 150px;
+        width: 160px;
     }
 
     .detail-title {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
 
-    .detail-overview {
+    .detail-original-title {
         font-size: 1rem;
     }
 
+    .detail-meta {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .detail-rating,
+    .detail-year,
+    .detail-runtime {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+
+    .detail-genres {
+        gap: 6px;
+    }
+
+    .detail-genre-tag {
+        padding: 4px 10px;
+        font-size: 0.75rem;
+    }
+
+    .detail-overview {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .detail-actions {
+        max-width: 100%;
+        gap: 10px;
+    }
+
+    .detail-play-btn,
+    .detail-favorite-btn,
+    .detail-share-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+
+    .trailer-section h3 {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+    }
+
     .detail-section {
-        padding: 30px 15px;
+        padding: 25px 15px;
     }
 
     .detail-section h3 {
         font-size: 1.5rem;
+        margin-bottom: 20px;
     }
 
     .cast-list {
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 12px;
     }
 
     .cast-photo {
@@ -527,11 +693,127 @@
         height: 60px;
     }
 
-    .recommendations-list {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    .cast-name {
+        font-size: 0.8rem;
     }
 
-    .trailer-section h3 {
-        font-size: 1.5rem;
+    .cast-character {
+        font-size: 0.7rem;
+    }
+
+    .recommendations-list {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 12px;
+    }
+
+    .recommendation-item img {
+        height: 160px;
+    }
+
+    .recommendation-info {
+        padding: 12px;
+    }
+
+    .recommendation-info h4 {
+        font-size: 0.9rem;
+    }
+
+    .recommendation-info p {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 375px) {
+    .detail-backdrop-section {
+        height: 30vh;
+        min-height: 180px;
+    }
+
+    .detail-poster {
+        width: 140px;
+    }
+
+    .detail-title {
+        font-size: 1.4rem;
+    }
+
+    .detail-original-title {
+        font-size: 0.9rem;
+    }
+
+    .detail-overview {
+        font-size: 0.85rem;
+    }
+
+    .detail-actions {
+        gap: 8px;
+    }
+
+    .detail-play-btn,
+    .detail-favorite-btn,
+    .detail-share-btn {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+    }
+
+    .cast-list {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 10px;
+    }
+
+    .cast-photo {
+        width: 55px;
+        height: 55px;
+    }
+
+    .recommendations-list {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+    }
+
+    .recommendation-item img {
+        height: 140px;
+    }
+}
+
+@media (max-width: 320px) {
+    .detail-backdrop-section {
+        height: 25vh;
+        min-height: 150px;
+    }
+
+    .detail-poster {
+        width: 120px;
+    }
+
+    .detail-title {
+        font-size: 1.3rem;
+    }
+
+    .detail-original-title {
+        font-size: 0.85rem;
+    }
+
+    .detail-overview {
+        font-size: 0.8rem;
+    }
+
+    .cast-list {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 8px;
+    }
+
+    .cast-photo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .recommendations-list {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 8px;
+    }
+
+    .recommendation-item img {
+        height: 120px;
     }
 }

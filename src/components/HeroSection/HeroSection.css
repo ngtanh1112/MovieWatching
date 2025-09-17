@@ -1,9 +1,12 @@
+/* HeroSection Styles - IMPROVED RESPONSIVE VERSION */
 .hero-section {
     position: relative;
     height: 100vh;
     overflow: hidden;
     display: flex;
     align-items: flex-end;
+    padding-top: 80px;
+    min-height: 600px;
 }
 
 .hero-background {
@@ -53,6 +56,7 @@
     font-weight: 700;
     margin-bottom: var(--spacing-sm);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    line-height: 1.1;
 }
 
 .heromovie-original-title {
@@ -60,12 +64,14 @@
     color: var(--text-muted);
     font-weight: 300;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    line-height: 1.2;
 }
 
 .heromovie-tags {
     display: flex;
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
 }
 
 .tag {
@@ -74,12 +80,14 @@
     border-radius: var(--border-radius-xl);
     font-size: 0.9rem;
     backdrop-filter: blur(10px);
+    white-space: nowrap;
 }
 
 .heromovie-genres {
     display: flex;
     gap: var(--spacing-sm);
     margin-bottom: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .genre-btn {
@@ -91,6 +99,7 @@
     cursor: pointer;
     font-size: 0.85rem;
     transition: var(--transition-normal);
+    white-space: nowrap;
 }
 
 .genre-btn:hover {
@@ -145,6 +154,7 @@
 .play-btn:hover {
     background: #0056b3;
     transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
 }
 
 .favorite-btn,
@@ -156,10 +166,11 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
     width: 50px;
     height: 50px;
+    justify-content: center;
 }
 
 .detail-btn {
-    padding-left: 21px;
+    padding-left: 0;
 }
 
 .favorite-btn:hover,
@@ -171,6 +182,9 @@
 .thumbnail-list {
     display: flex;
     gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
 }
 
 .thumbnail-item {
@@ -181,6 +195,7 @@
     cursor: pointer;
     transition: var(--transition-normal);
     border: 2px solid transparent;
+    flex-shrink: 0;
 }
 
 .thumbnail-item:hover {
@@ -199,67 +214,342 @@
     object-fit: cover;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* Responsive Design - IMPROVED */
+@media (max-width: 1200px) {
+    .hero-section {
+        padding-top: 90px;
+    }
+
+    .hero-content {
+        padding: 80px 60px 4rem;
+    }
+
     .heromovie-title {
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
 
     .heromovie-original-title {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
+    }
+
+    .heromovie-overview {
+        max-width: 500px;
+    }
+}
+
+@media (max-width: 992px) {
+    .hero-section {
+        padding-top: 95px;
+        min-height: 500px;
+    }
+
+    .hero-content {
+        padding: 60px 40px 3rem;
+    }
+
+    .heromovie-title {
+        font-size: 2.2rem;
+    }
+
+    .heromovie-overview {
+        max-width: 450px;
+        font-size: 1rem;
+    }
+
+    .heromovie-bottom {
+        gap: var(--spacing-lg);
+    }
+
+    .play-btn {
+        width: 70px;
+        height: 70px;
+        font-size: 28px;
+        padding-left: 20px;
+    }
+
+    .favorite-btn,
+    .detail-btn {
+        width: 45px;
+        height: 45px;
+    }
+
+    .thumbnail-item {
+        width: 70px;
+        height: 105px;
+    }
+}
+
+/* Tablet Layout */
+@media (max-width: 768px) {
+    .hero-section {
+        height: auto;
+        min-height: 100vh;
+        padding-top: 120px;
+    }
+
+    .hero-content {
+        padding: 40px 20px 2rem;
+    }
+
+    .heromovie-title {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.2;
+    }
+
+    .heromovie-original-title {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .heromovie-tags {
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .tag {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+    }
+
+    .heromovie-genres {
+        gap: 6px;
+        margin-bottom: 1rem;
+    }
+
+    .genre-btn {
+        font-size: 0.7rem;
+        padding: 6px 12px;
+    }
+
+    .heromovie-overview {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        max-width: 100%;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
     .heromovie-bottom {
         flex-direction: column;
-        gap: var(--spacing-md);
+        gap: 1.5rem;
         align-items: flex-start;
     }
 
     .heromovie-actions {
-        flex-wrap: wrap;
+        gap: 0.75rem;
     }
 
-    .action-btn {
-        padding: var(--spacing-sm) var(--spacing-lg);
-        font-size: 0.9rem;
+    .play-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        padding-left: 18px;
+    }
+
+    .favorite-btn,
+    .detail-btn {
+        width: 42px;
+        height: 42px;
+        font-size: 16px;
     }
 
     .thumbnail-list {
-        justify-content: flex-start;
-        overflow-x: auto;
-        padding-bottom: var(--spacing-sm);
+        gap: 8px;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
     }
 
     .thumbnail-item {
         width: 60px;
         height: 90px;
-        flex-shrink: 0;
     }
 }
 
+/* Mobile Layout */
 @media (max-width: 480px) {
+    .hero-section {
+        padding-top: 130px;
+        min-height: 90vh;
+    }
+
     .hero-content {
-        padding: var(--spacing-lg);
-        padding-bottom: var(--spacing-xxl);
+        padding: 30px 15px 1.5rem;
     }
 
     .heromovie-title {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
+        margin-bottom: 0.4rem;
     }
 
     .heromovie-original-title {
-        font-size: 1rem;
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
     }
 
     .heromovie-overview {
-        font-size: 1rem;
+        font-size: 0.85rem;
+        -webkit-line-clamp: 2;
+        margin-bottom: 1rem;
+        line-height: 1.3;
     }
 
-    .heromovie-tags {
+    .tag {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+    }
+
+    .genre-btn {
+        font-size: 0.65rem;
+        padding: 4px 8px;
+    }
+
+    .heromovie-bottom {
+        gap: 1.2rem;
+    }
+
+    .play-btn {
+        width: 55px;
+        height: 55px;
+        font-size: 20px;
+        padding-left: 16px;
+    }
+
+    .favorite-btn,
+    .detail-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 14px;
+    }
+
+    .thumbnail-list {
+        gap: 6px;
+        justify-content: center;
         flex-wrap: wrap;
     }
 
-    .heromovie-genres {
-        flex-wrap: wrap;
+    .thumbnail-item {
+        width: 50px;
+        height: 75px;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 375px) {
+    .hero-section {
+        padding-top: 140px;
+        min-height: 85vh;
+    }
+
+    .hero-content {
+        padding: 25px 12px 1rem;
+    }
+
+    .heromovie-title {
+        font-size: 1.4rem;
+    }
+
+    .heromovie-original-title {
+        font-size: 0.85rem;
+    }
+
+    .heromovie-overview {
+        font-size: 0.8rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .heromovie-bottom {
+        gap: 1rem;
+    }
+
+    .heromovie-actions {
+        gap: 0.6rem;
+    }
+
+    .play-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+        padding-left: 14px;
+    }
+
+    .favorite-btn,
+    .detail-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 12px;
+    }
+
+    .thumbnail-list {
+        gap: 5px;
+        justify-content: center;
+    }
+
+    .thumbnail-item {
+        width: 45px;
+        height: 68px;
+    }
+}
+
+/* Extra Small Mobile */
+@media (max-width: 320px) {
+    .hero-section {
+        padding-top: 150px;
+        min-height: 80vh;
+    }
+
+    .hero-content {
+        padding: 20px 10px 0.8rem;
+    }
+
+    .heromovie-title {
+        font-size: 1.3rem;
+    }
+
+    .heromovie-original-title {
+        font-size: 0.8rem;
+    }
+
+    .heromovie-overview {
+        font-size: 0.75rem;
+        margin-bottom: 0.7rem;
+    }
+
+    .tag {
+        font-size: 0.65rem;
+        padding: 3px 6px;
+    }
+
+    .genre-btn {
+        font-size: 0.6rem;
+        padding: 3px 6px;
+    }
+
+    .play-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 16px;
+        padding-left: 12px;
+    }
+
+    .favorite-btn,
+    .detail-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 11px;
+    }
+
+    .thumbnail-list {
+        gap: 4px;
+        justify-content: center;
+    }
+
+    .thumbnail-item {
+        width: 40px;
+        height: 60px;
     }
 }
